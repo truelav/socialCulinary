@@ -1,32 +1,36 @@
-import User from "../models/User"
+import User from "../models/User.js";
 
-export const getuser = async (req, res) => {
+/* READ */
+export const getUser = async (req, res) => {
     try {
-
-        const { id } = req.params
-        const user = await User.findById(id)
-        res.status(200).json(user)
-
-    } catch (error) {
-        res.status(404).json({ message: error.message })
+        const { id } = req.params;
+        const user = await User.findById(id);
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
     }
-}
+};
 
 export const getUserFriends = async (req, res) => {
     try {
+        const { id } = req.params;
+        const user = await User.findById(id);
 
-        const { id } = req.params
-        const user = await User.findById(id)
         const friends = await Promise.all(
             user.friends.map((id) => User.findById(id))
-        )
-        res.status(200).json(friends)
-
-    } catch (error) {
-        res.status(404).json({ message: error.message })
+        );
+        const formattedFriends = friends.map(
+            ({ _id, firstName, lastName, occupation, location, picturePath }) => {
+                return { _id, firstName, lastName, occupation, location, picturePath };
+            }
+        );
+        res.status(200).json(formattedFriends);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
     }
-}
+};
 
+/* UPDATE */
 export const addRemoveFriend = async (req, res) => {
     try {
         const { id, friendId } = req.params;
@@ -56,4 +60,4 @@ export const addRemoveFriend = async (req, res) => {
     } catch (err) {
         res.status(404).json({ message: err.message });
     }
-}
+};

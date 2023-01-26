@@ -9,6 +9,9 @@ import { Path } from 'mongoose'
 import { fileURLToPath } from 'url'
 import morgan from 'morgan'
 
+import userRoutes from './controllers/users'
+import postsRoutes from './controllers/posts'
+
 
 // CONFIGURATIONS
 
